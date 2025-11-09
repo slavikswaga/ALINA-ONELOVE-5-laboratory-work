@@ -1,0 +1,27 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
+#include <stdint.h>
+#include <bitset>
+
+void ShowTitle() {
+	std::cout << "\t| dec   | oct  | hex| bin\n";
+}
+void ShowValue(std::string beg, uint16_t x) { //преобразованиие в unsigned int
+	std::cout << beg << "\t|"
+		<< std::dec << std::setw(7) << std::setfill(' ') << std::right << x << "|"
+		<< std::oct << std::setw(6) << std::setfill('0') << std::internal << x << "|"
+		<< std::hex << std::setw(4) << std::setfill('0') << std::internal << x << "| "
+		<< std::bitset<16>(x) << std::endl;
+}
+
+int main() {
+	setlocale(LC_ALL, "RU");
+	int16_t x;
+	std::cout << "Введите число: ";
+	std::cin >> x;
+	ShowTitle();
+	ShowValue("uint", x);
+	system("pause");
+	return 0; //вывод: если положительно то хранится в ПК, если отрицательное то в ДК
+}

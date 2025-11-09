@@ -1,0 +1,43 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
+#include <stdint.h>
+#include <bitset>
+
+std::string bin(uint16_t x) {
+	uint16_t i = ~((uint16_t)(-1) >> 1), p = 0;
+	std::string r = "";
+	while (i != 0) {
+		if (x & i) r += '1';
+		else     r += '0';
+		i = i >> 1;
+		p++;
+		if (p % 4 == 0) r += " ";
+	}
+	return r;
+}
+void ShowTitle() {
+	std::cout << "\t| dec   | oct | hex| bin\n";
+}
+void ShowValue(std::string beg, uint16_t x) {
+	std::cout << beg << "\t|"
+		<< std::dec << std::setw(7) << std::setfill(' ') << std::right << x << "|"
+		<< std::oct << std::setw(6) << std::setfill('0') << std::internal << x << "|"
+		<< std::hex << std::setw(4) << std::setfill('0') << std::internal << x << "| "
+		<< bin(x) << std::endl;
+}
+
+int main() {
+	setlocale(LC_ALL, "RU");
+	uint16_t x, y, z;
+	std::cout << "Введите числа: ";
+	std::cin >> x;
+	std::cin >> y;
+	ShowTitle();
+	ShowValue("x  =", x);
+	ShowValue("y  =", y);
+	z = x + y;
+	ShowValue("x+y=", z);
+	system("pause");
+	return 0;
+}

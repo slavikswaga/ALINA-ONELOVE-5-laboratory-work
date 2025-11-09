@@ -1,0 +1,128 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
+#include <stdint.h>
+#include <bitset>
+
+
+static std::string bin(uint16_t x) {
+	uint16_t i = ~((uint16_t)(-1) >> 1), p = 0;
+	std::string r = "";
+	while (i != 0) {
+		if (x & i) r += '1';
+		else     r += '0';
+		i = i >> 1;
+		p++;
+		if (p % 4 == 0) r += " ";
+	}
+	return r;
+}
+void ShowTitle() {
+	std::cout << "\t| dec   | oct  | hex| bin\n";
+}
+void ShowValue(std::string beg, uint16_t x) { //**
+	std::cout << beg << "\t|"
+		<< std::dec << std::setw(7) << std::setfill(' ') << std::right << x << "|"
+		<< std::oct << std::setw(6) << std::setfill('0') << std::internal << x << "|"
+		<< std::hex << std::setw(4) << std::setfill('0') << std::internal << x << "| "
+		<< bin(x) << std::endl;
+}
+void ShowValueint(std::string beg, int16_t x) { //**
+	std::cout << beg << "\t|"
+		<< std::dec << std::setw(7) << std::setfill(' ') << std::right << x << "|"
+		<< std::oct << std::setw(6) << std::setfill('0') << std::internal << x << "|"
+		<< std::hex << std::setw(4) << std::setfill('0') << std::internal << x << "| "
+		<< bin(x) << std::endl;
+}
+int main() {
+	setlocale(LC_ALL, "RU");
+	int16_t x, y;
+	std::cout << "Введите числа: ";
+	std::cin >> x >> y;
+
+	//работаем с числом x (находим модуль, знак, ПК, ОК, ДК)
+	uint16_t xIsNegat = (x >> 15) & 1;
+	xIsNegat = (xIsNegat << 15);
+
+	uint16_t absx = (x < 0) ? -x : x;
+
+	uint16_t PKx = xIsNegat | absx;
+	uint16_t OBRKx, DKx;
+	if (x < 0) {
+		OBRKx = ~PKx | 0b1000000000000000;
+		DKx = OBRKx + 1;
+	}
+	else {
+		OBRKx = PKx;
+		DKx = PKx;
+	}
+	//работаем с числом y (находим модуль, знак, ПК, ОК, ДК)
+	uint16_t yIsNegat = (y >> 15) & 1;
+	yIsNegat = (yIsNegat << 15);
+
+	uint16_t absy = (y < 0) ? -y : y;
+
+	uint16_t PKy = yIsNegat | absy;
+	uint16_t OBRKy, DKy;
+	if (y < 0) {
+		OBRKy = ~PKy | 0b1000000000000000;
+		DKy = OBRKy + 1;
+	}
+	else {
+		OBRKy = PKy;
+		DKy = PKy;
+	}
+
+	//СЛОЖЕНИЕ В ПК
+	uint16_t resPK, resSign;
+	resSign = 0b0000000000000000;
+	if ((x >= 0) && (y >= 0))
+		resPK = absx + absy;
+	else if ((x < 0) && (y < 0)) {
+		resPK = absx + absy;
+		resSign = 0b1000000000000000;
+	}
+	else {
+		if (absx > absy) {
+			resPK = absx - absy;
+			resSign = xIsNegat;
+		}
+		else {
+			resPK = absy - absx;
+			resSign = yIsNegat;
+		}
+	}
+	if (resPK != 0)
+		resPK = resPK | resSign;
+	//СЛОЖЕНИЕ В ОК
+	uint32_t resOBRK;
+	resOBRK = OBRKx + OBRKy;
+	if (resOBRK > 0b1111111111111111) {
+		resOBRK = resOBRK & 0b00000000000000001111111111111111;
+		resOBRK += 1;
+	}
+	//СЛОЖЕНИЕ В ДК
+	uint16_t resDK = DKx + DKy;
+
+
+
+	ShowTitle();
+	ShowValueint("x+y = ", x + y);
+	std::cout << "------------------------------------------------\n";
+	ShowValue("ПК x -", PKx);
+	ShowValue("ПК y -", PKy);
+	ShowValue("ПКx+y -", resPK);
+	std::cout << "------------------------------------------------\n";
+	ShowValue("ОК x -", OBRKx);
+	ShowValue("ОК y -", OBRKy);
+	ShowValue("ОКx+y -", resOBRK);
+	std::cout << "------------------------------------------------\n";
+	ShowValue("ДК x -", DKx);
+	ShowValue("ДК y -", DKy);
+	ShowValue("ДКx+y -", resDK);
+
+
+
+	system("pause");
+	return 0;
+}

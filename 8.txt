@@ -1,0 +1,97 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
+#include <stdint.h>
+#include <bitset>
+
+std::string bin(uint16_t x) {
+	uint16_t i = ~((uint16_t)(-1) >> 1), p = 0;
+	std::string r = "";
+	while (i != 0) {
+		if (x & i) r += '1';
+		else     r += '0';
+		i = i >> 1;
+		p++;
+		if (p % 4 == 0) r += " ";
+	}
+	return r;
+}
+
+void ShowTitle() {
+	std::cout << "\t| dec   | oct | hex| bin\n";
+}
+void ShowValue(std::string beg, uint16_t x) {
+	std::cout << beg << "\t|"
+		<< std::dec << std::setw(7) << std::setfill(' ') << std::right << x << "|"
+		<< std::oct << std::setw(6) << std::setfill('0') << std::internal << x << "|"
+		<< std::hex << std::setw(4) << std::setfill('0') << std::internal << x << "| "
+		<< bin(x) << std::endl;
+}
+
+int main() {
+	setlocale(LC_ALL, "RU");
+	uint16_t ux, logs, cikls;
+	int16_t x, arifs, y, x_for_alghorithm;
+	int s;
+	std::cout << "Введите число: ";
+	std::cin >> x;
+	ux = x;
+	std::cout << "Введите количество бит на которое это число нужно сдвинуть\n";
+	std::cin >> s;
+	//арифметический сдвиг
+	if (s > 0)
+		arifs = x << s;
+	else {
+		arifs = x >> (-s);
+	}
+	//логический сдвиг
+	
+	if (s > 0) {
+		logs = ux << s;
+	}
+	else {
+		logs = ux >> (-s);
+		logs = logs & 0b0111111111111111;
+	}
+	//циклический сдвиг
+	int carrybit;
+	cikls = ux;
+	if (s > 0) {
+		for (int i = s; i > 0; i--) {
+			carrybit = (cikls >> 15) & 1;
+			cikls <<= 1;
+			cikls = cikls | carrybit;
+		}
+	}
+	else {
+		for (int i = (-s); i > 0; i--) {
+			carrybit = cikls & 0b0000000000000001;
+			carrybit = carrybit << 15;
+			cikls = cikls >> 1;
+			cikls = cikls | carrybit;
+		}
+			
+	}
+	int bit;
+	x_for_alghorithm = x;
+	y = 0;
+	for (int i = abs(s); i > 0; i--) {
+		bit = x_for_alghorithm & 1;
+		x_for_alghorithm >>= 1;
+		y = y | bit;
+		if (i == 1)
+			break;
+		y <<= 1;
+	}
+
+	ShowTitle();
+	ShowValue("x = ", x);
+	ShowValue("арифс", arifs);
+	ShowValue("логсдв", logs);
+	ShowValue("циклич", cikls);
+	std::cout << "-------------------------------------------\n";
+	ShowValue("x =", x);
+	ShowValue("y =", y);
+	
+	return 0;
+}

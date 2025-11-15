@@ -7,6 +7,7 @@
 void ShowTitle() {
 	std::cout << "\t| dec   | oct  | hex| bin\n";
 }
+
 void ShowValue(std::string beg, uint16_t x) {
 	std::cout << beg << "\t|"
 		<< std::dec << std::setw(7) << std::setfill(' ') << std::right << x << "|"

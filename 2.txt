@@ -16,6 +16,7 @@ std::string bin(uint16_t x) {
 	}
 	return r;
 }
+
 void ShowTitle() {
 	std::cout << "\t| dec   | oct | hex| bin\n";
 }

@@ -75,11 +75,9 @@ int main() {
 	//СЛОЖЕНИЕ В ПК
 	uint16_t resPK, resSign;
 	resSign = 0b0000000000000000;
-	if ((x >= 0) && (y >= 0))
+	if (xIsNegat == yIsNegat) {
 		resPK = absx + absy;
-	else if ((x < 0) && (y < 0)) {
-		resPK = absx + absy;
-		resSign = 0b1000000000000000;
+		resSign = xIsNegat;
 	}
 	else {
 		if (absx > absy) {

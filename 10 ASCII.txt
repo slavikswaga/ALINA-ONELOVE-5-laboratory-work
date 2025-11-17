@@ -1,0 +1,25 @@
+#include <iostream>
+
+int main() {
+	setlocale(LC_ALL, "RU");
+	char a, b, c;
+	std::cout << "Введите 3 латинских символа\n";
+	std::cin >> a >> b >> c;
+	std::cout <<(int)a << " " << a << std::endl;
+	std::cout <<(int)b << " " << b << std::endl;
+	std::cout <<(int)c << " " << c << std::endl;
+ 	a = a | ' ';
+	b = b & '_';
+	std::cout << "Изменение 1 символа в строчный, 2 в заглавный\n";
+	std::cout << (int)a << " " << a << std::endl;
+	std::cout << (int)b << " " << b << std::endl;
+	std::cout << (int)c << " " << c << std::endl;
+	std::cout << "Изменение видов всех текущих символов\n";
+	a = a ^ ' ';
+	b = b ^ ' ';
+	c = c ^ ' ';
+	std::cout << (int)a << " " << a << std::endl;
+	std::cout << (int)b << " " << b << std::endl;
+	std::cout << (int)c << " " << c << std::endl;
+	return 0;
+}

@@ -1,0 +1,71 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
+#include <stdint.h>
+#include <bitset>
+
+std::string bin(uint16_t x) {
+	uint16_t i = ~((uint16_t)(-1) >> 1), p = 0;
+	std::string r = "";
+	while (i != 0) {
+		if (x & i) r += '1';
+		else     r += '0';
+		i = i >> 1;
+		p++;
+		if (p % 4 == 0) r += " ";
+	}
+	return r;
+}
+
+void ShowTitle() {
+	std::cout << "\t| dec   | oct | hex| bin\n";
+}
+void ShowValue(std::string beg, uint16_t x) {
+	std::cout << beg << "\t|"
+		<< std::dec << std::setw(7) << std::setfill(' ') << std::right << x << "|"
+		<< std::oct << std::setw(6) << std::setfill('0') << std::internal << x << "|"
+		<< std::hex << std::setw(4) << std::setfill('0') << std::internal << x << "| "
+		<< bin(x) << std::endl;
+}
+
+int main() {
+	setlocale(LC_ALL, "RU");
+	uint16_t A1, A2, A3, A4, B1, B2, B3, B4;
+	std::cout << "Введите восемь небольших десятичных чисел: \n";
+	std::cin >> A1 >> A2 >> A3 >> A4 >> B1 >> B2 >> B3 >> B4;
+	A1 = A1 & 0x000f;
+	A2 = A2 & 0x000f;
+	A3 = A3 & 0x000f;
+	A4 = A4 & 0x000f;
+	B1 = B1 & 0x000f;
+	B2 = B2 & 0x000f;
+	B3 = B3 & 0x000f;
+	B4 = B4 & 0x000f;
+	ShowTitle();
+	ShowValue("A1 = ", A1);
+	ShowValue("A2 = ", A2);
+	ShowValue("A3 = ", A3);
+	ShowValue("A4 = ", A4);
+	ShowValue("B1 = ", B1);
+	ShowValue("B2 = ", B2);
+	ShowValue("B3 = ", B3);
+	ShowValue("B4 = ", B4);
+	uint16_t Aodd = (A3 << 8) | (1 << 12) | A1 | (1 << 4);
+	uint16_t Bodd = (B3 << 8) | B1;
+	uint16_t Aeven = (A4 << 12) | (1 << 8) | (A2 << 4);
+	uint16_t Beven = (B4 << 12) | (B2 << 4);
+	ShowValue(" Aodd =", Aodd);
+	ShowValue("Aeven =", Aeven);
+	ShowValue(" Bodd =", Bodd);
+	ShowValue("Beven =", Beven);
+
+	uint16_t Codd = Aodd + Bodd;
+	uint16_t Ceven = Aeven + Beven;
+	Codd = Codd & 0b0000111100001111;
+	Ceven = Ceven & 0b1111000011110000;
+	uint16_t C = Codd | Ceven;
+	ShowValue(" Codd =", Codd);
+	ShowValue("Ceven =", Ceven);
+	ShowValue("    C =", C);
+	return 0;
+}

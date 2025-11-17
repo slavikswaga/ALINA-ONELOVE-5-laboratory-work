@@ -1,0 +1,9 @@
+#include <iostream>
+
+int main()
+{
+    system("chcp 20866 > NUL");
+    char Rus = 'г';
+    Rus = Rus & 0b01111111;
+    std::cout << Rus;
+}

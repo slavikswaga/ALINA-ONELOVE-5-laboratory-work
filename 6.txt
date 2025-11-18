@@ -19,6 +19,7 @@ void ShowValue(std::string beg, uint16_t x) { //преобразованиие �
 int main() {
 	setlocale(LC_ALL, "RU");
 	int16_t x;
+
 	std::cout << "Введите число: ";
 	std::cin >> x;
 	ShowTitle();

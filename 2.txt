@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <bitset>
 
+
 std::string bin(uint16_t x) {
 	uint16_t i = ~((uint16_t)(-1) >> 1), p = 0;
 	std::string r = "";
